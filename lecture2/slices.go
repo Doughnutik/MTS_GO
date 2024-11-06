@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
 
 func main() {
 	// инициализация слайсов
@@ -34,4 +37,15 @@ func main() {
 	words = append(words[1:2], words[3:4]...)
 	fmt.Println(words)
 	fmt.Println(len(words), cap(words))
+
+	// Можно использовать пакет slices, в котором реализовано ровно то, что написано выше
+	// Delete(S, i, j) удалит из слайса S подотрезок с i-го по j-ый невключая. Важно, что функция inplace
+	// Лучше использовать пакет slices, т.к. он ещё подчищает память
+	slices.Delete(words, 0, 1)
+	fmt.Println(words)
+
+
+	words_2d = [][]string{
+		{"sky", "ocean"}
+	}
 }
