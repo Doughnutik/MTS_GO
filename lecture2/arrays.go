@@ -11,17 +11,18 @@ func main() {
 
 	for _, num := range a {
 		print(num)
-		print()
 	}
 	println()
 	for _, num := range b {
 		print(num)
-		print()
 	}
 	println()
 	for _, num := range c {
 		print(num)
-		print()
+	}
+	println()
+	for i, num := range c {
+		println(i, num)
 	}
 	println()
 

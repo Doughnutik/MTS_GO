@@ -1,5 +1,10 @@
-int main() {
-    int a[10];
+#include <iostream>
+using namespace std;
 
-    int a[20];
+int x;
+
+int main() {
+    cin >> x;
+    int a[x];
+    for (int i=0; i<x; ++i) cout << a[i] << " ";
 }

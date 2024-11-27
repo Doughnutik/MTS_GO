@@ -32,4 +32,12 @@ func main() {
 
 	println(*pow(&a))
 	println(a)
+
+	c := 5
+	p := &c
+	p2 := *&p
+	p3 := &*p // как видим, p2 и p3 равны p
+	print(p == p2)
+	print("\n")
+	print(p == p3)
 }

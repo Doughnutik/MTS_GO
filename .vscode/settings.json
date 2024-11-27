@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "__config": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "ranges": "cpp",
+        "tuple": "cpp",
+        "variant": "cpp",
+        "version": "cpp"
+    }
+}

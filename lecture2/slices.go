@@ -2,6 +2,11 @@ package main
 
 import "fmt"
 
+func f(a []int) {
+	ss2 := a
+	ss2[0] = 5
+}
+
 func main() {
 	// инициализация слайсов
 	var s1 []int
@@ -34,4 +39,14 @@ func main() {
 	words = append(words[1:2], words[3:4]...)
 	fmt.Println(words)
 	fmt.Println(len(words), cap(words))
+
+	ss1 := []int{1}
+	ss2 := append(ss1, 1, 2, 3, 4, 5)
+	println(len(ss1), cap(ss1))
+	println(len(ss2), cap(ss2))
+
+	f(ss1) // передаётся в функцию по ссылке
+	for _, num := range ss1 {
+		println(num)
+	}
 }

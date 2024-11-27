@@ -8,6 +8,9 @@ type book struct {
 	// по умолчанию заполняются нулевыми значениями
 }
 
+type empty struct {
+}
+
 func main() {
 	var book_one book         // первый вариант инициализации
 	book_one.Author = "James" // публичное поле, видно за пределами пакета main
