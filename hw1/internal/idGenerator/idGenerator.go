@@ -3,7 +3,7 @@ package idgenerator
 import "hw1/internal/book"
 
 type Generator interface {
-	Generate(book book.Book) uint
+	Generate(book *book.Book) uint
 }
 
 type HashGenerator struct {
@@ -27,7 +27,7 @@ func NewBasicGenerator() BasicGenerator {
 	return BasicGenerator{0}
 }
 
-func (hashgen *HashGenerator) Generate(book book.Book) uint {
+func (hashgen *HashGenerator) Generate(book *book.Book) uint {
 	var hash uint
 	title := book.GetTitle()
 	author := book.GetAuthor()
@@ -42,7 +42,7 @@ func (hashgen *HashGenerator) Generate(book book.Book) uint {
 	return hash
 }
 
-func (basicgen *BasicGenerator) Generate(book book.Book) uint {
+func (basicgen *BasicGenerator) Generate(book *book.Book) uint {
 	basicgen.id++
 	return basicgen.id
 }

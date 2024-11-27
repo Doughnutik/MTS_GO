@@ -9,23 +9,23 @@ func NewBook(title, author string, pages uint) Book {
 	return Book{title, author, pages, 1, 0}
 }
 
-func (book Book) GetTitle() string {
+func (book *Book) GetTitle() string {
 	return book.title
 }
 
-func (book Book) GetAuthor() string {
+func (book *Book) GetAuthor() string {
 	return book.author
 }
 
-func (book Book) GetPages() uint {
+func (book *Book) GetPages() uint {
 	return book.pages
 }
 
-func (book Book) GetAmount() uint {
+func (book *Book) GetAmount() uint {
 	return book.amount
 }
 
-func (book Book) GetId() uint {
+func (book *Book) GetId() uint {
 	return book.pages
 }
 
