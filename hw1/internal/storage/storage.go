@@ -12,6 +12,7 @@ type Storage interface {
 	RemoveNum(id uint, num uint)
 	RemoveAll(id uint)
 	Regenerate(generator idgenerator.Generator)
+	GetBooks() []*book.Book
 }
 
 type MapStorage struct {
@@ -20,6 +21,10 @@ type MapStorage struct {
 
 type SliceStorage struct {
 	storage []book.Book
+}
+
+func NewMapStorage() MapStorage {
+	return MapStorage{map[uint]*book.Book{}}
 }
 
 func (mapstore *MapStorage) Find(id uint) (book.Book, bool) {
@@ -49,9 +54,7 @@ func (mapstore *MapStorage) RemoveNum(id uint, num uint) {
 }
 
 func (mapstore *MapStorage) RemoveAll(id uint) {
-	if _, ok := mapstore.storage[id]; ok {
-		delete(mapstore.storage, id)
-	}
+	delete(mapstore.storage, id)
 }
 
 func (mapstore *MapStorage) Regenerate(generator idgenerator.Generator) {
@@ -118,4 +121,20 @@ func (slicestore *SliceStorage) Regenerate(generator idgenerator.Generator) {
 		newstorage = append(newstorage, value)
 	}
 	slicestore.storage = newstorage
+}
+
+func (slicestore *SliceStorage) GetBooks() []*book.Book {
+	books := []*book.Book{}
+	for _, value := range slicestore.storage {
+		books = append(books, &value)
+	}
+	return books
+}
+
+func (mapstore *MapStorage) GetBooks() []*book.Book {
+	books := []*book.Book{}
+	for _, value := range mapstore.storage {
+		books = append(books, value)
+	}
+	return books
 }

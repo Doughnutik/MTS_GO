@@ -31,14 +31,12 @@ func (hashgen *HashGenerator) Generate(book *book.Book) uint {
 	var hash uint
 	title := book.GetTitle()
 	author := book.GetAuthor()
-	pages := book.GetPages()
 	for i := 0; i < len(title); i++ {
 		hash = (hash + uint(title[i])*hashgen.base) % hashgen.mod
 	}
 	for i := 0; i < len(author); i++ {
 		hash = (hash + uint(author[i])*hashgen.base) % hashgen.mod
 	}
-	hash = (hash + pages*hashgen.base) % hashgen.mod
 	return hash
 }
 
