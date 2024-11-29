@@ -8,65 +8,53 @@ import (
 type Storage interface {
 	Find(id uint) (book.Book, bool)
 	Add(book book.Book)
-	AddNum(id uint, num uint)
-	RemoveNum(id uint, num uint)
-	RemoveAll(id uint)
+	Remove(id uint)
 	Regenerate(generator idgenerator.Generator)
-	GetBooks() []*book.Book
+	GetBooks() []book.Book
 }
 
 type MapStorage struct {
-	storage map[uint]*book.Book
+	storage map[uint]book.Book
 }
 
 type SliceStorage struct {
 	storage []book.Book
 }
 
-func NewMapStorage() MapStorage {
-	return MapStorage{map[uint]*book.Book{}}
+func NewMapStorage() *MapStorage {
+	return &MapStorage{map[uint]book.Book{}}
 }
 
-func (mapstore *MapStorage) Find(id uint) (book.Book, bool) {
+func NewSliceStorage() *SliceStorage {
+	return &SliceStorage{}
+}
+
+func (mapstore MapStorage) Find(id uint) (book.Book, bool) {
 	book, ok := mapstore.storage[id]
-	return *book, ok
+	return book, ok
 }
 
 func (mapstore *MapStorage) Add(book book.Book) {
 	if _, ok := mapstore.storage[book.GetId()]; !ok {
-		mapstore.storage[book.GetId()] = &book
+		mapstore.storage[book.GetId()] = book
 	}
 }
 
-func (mapstore *MapStorage) AddNum(id uint, num uint) {
-	if _, ok := mapstore.storage[id]; ok {
-		mapstore.storage[id].SetAmount(mapstore.storage[id].GetAmount() + num)
-	}
-}
-
-func (mapstore *MapStorage) RemoveNum(id uint, num uint) {
-	if _, ok := mapstore.storage[id]; ok {
-		mapstore.storage[id].SetAmount(max(mapstore.storage[id].GetAmount()-num, 0))
-		if mapstore.storage[id].GetAmount() == 0 {
-			delete(mapstore.storage, id)
-		}
-	}
-}
-
-func (mapstore *MapStorage) RemoveAll(id uint) {
+func (mapstore *MapStorage) Remove(id uint) {
 	delete(mapstore.storage, id)
 }
 
 func (mapstore *MapStorage) Regenerate(generator idgenerator.Generator) {
-	newstorage := map[uint]*book.Book{}
+	newstorage := map[uint]book.Book{}
 	for _, value := range mapstore.storage {
 		id := generator.Generate(value)
+		value.SetId(id)
 		newstorage[id] = value
 	}
 	mapstore.storage = newstorage
 }
 
-func (slicestore *SliceStorage) Find(id uint) (book.Book, bool) {
+func (slicestore SliceStorage) Find(id uint) (book.Book, bool) {
 	for _, value := range slicestore.storage {
 		if value.GetId() == id {
 			return value, true
@@ -84,27 +72,7 @@ func (slicestore *SliceStorage) Add(book book.Book) {
 	slicestore.storage = append(slicestore.storage, book)
 }
 
-func (slicestore *SliceStorage) AddNum(id uint, num uint) {
-	for _, value := range slicestore.storage {
-		if value.GetId() == id {
-			value.SetAmount(value.GetAmount() + num)
-		}
-	}
-}
-
-func (slicestore *SliceStorage) RemoveNum(id uint, num uint) {
-	for i, value := range slicestore.storage {
-		if value.GetId() == id {
-			value.SetAmount(max(value.GetAmount()-num, 0))
-			if value.GetAmount() == 0 {
-				slicestore.storage[i] = slicestore.storage[len(slicestore.storage)-1]
-				slicestore.storage = slicestore.storage[:len(slicestore.storage)-1]
-			}
-		}
-	}
-}
-
-func (slicestore *SliceStorage) RemoveAll(id uint) {
+func (slicestore *SliceStorage) Remove(id uint) {
 	for i, value := range slicestore.storage {
 		if value.GetId() == id {
 			slicestore.storage[i] = slicestore.storage[len(slicestore.storage)-1]
@@ -114,25 +82,19 @@ func (slicestore *SliceStorage) RemoveAll(id uint) {
 }
 
 func (slicestore *SliceStorage) Regenerate(generator idgenerator.Generator) {
-	newstorage := []book.Book{}
-	for _, value := range slicestore.storage {
-		id := generator.Generate(&value)
+	for i, value := range slicestore.storage {
+		id := generator.Generate(value)
 		value.SetId(id)
-		newstorage = append(newstorage, value)
+		slicestore.storage[i] = value
 	}
-	slicestore.storage = newstorage
 }
 
-func (slicestore *SliceStorage) GetBooks() []*book.Book {
-	books := []*book.Book{}
-	for _, value := range slicestore.storage {
-		books = append(books, &value)
-	}
-	return books
+func (slicestore SliceStorage) GetBooks() []book.Book {
+	return slicestore.storage
 }
 
-func (mapstore *MapStorage) GetBooks() []*book.Book {
-	books := []*book.Book{}
+func (mapstore *MapStorage) GetBooks() []book.Book {
+	books := []book.Book{}
 	for _, value := range mapstore.storage {
 		books = append(books, value)
 	}

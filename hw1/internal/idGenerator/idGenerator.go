@@ -1,9 +1,12 @@
 package idgenerator
 
-import "hw1/internal/book"
+import (
+	"hash/crc32"
+	"hw1/internal/book"
+)
 
 type Generator interface {
-	Generate(book *book.Book) uint
+	Generate(book book.Book) uint
 }
 
 type HashGenerator struct {
@@ -11,8 +14,7 @@ type HashGenerator struct {
 	base uint
 }
 
-type BasicGenerator struct {
-	id uint
+type CRC32 struct {
 }
 
 func NewDefaultHashGenerator() HashGenerator {
@@ -23,11 +25,11 @@ func NewHashGenerator(mod, base uint) HashGenerator {
 	return HashGenerator{mod, base}
 }
 
-func NewBasicGenerator() BasicGenerator {
-	return BasicGenerator{0}
+func NewCRC32() CRC32 {
+	return CRC32{}
 }
 
-func (hashgen *HashGenerator) Generate(book *book.Book) uint {
+func (hashgen HashGenerator) Generate(book book.Book) uint {
 	var hash uint
 	title := book.GetTitle()
 	author := book.GetAuthor()
@@ -40,7 +42,7 @@ func (hashgen *HashGenerator) Generate(book *book.Book) uint {
 	return hash
 }
 
-func (basicgen *BasicGenerator) Generate(book *book.Book) uint {
-	basicgen.id++
-	return basicgen.id
+func (basicgen CRC32) Generate(book book.Book) uint {
+	hash := crc32.ChecksumIEEE([]byte(book.GetTitle() + book.GetAuthor()))
+	return uint(hash)
 }

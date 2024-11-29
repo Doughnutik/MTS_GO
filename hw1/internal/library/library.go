@@ -9,9 +9,7 @@ import (
 type Library interface {
 	Find(title string, author string) (book.Book, bool)
 	Add(title string, author string)
-	AddNum(title string, author string, num uint)
-	RemoveNum(title string, author string, num uint)
-	RemoveAll(title string, author string)
+	Remove(title string, author string)
 	Regenerate(generator idgenerator.Generator)
 	ChangeStorage(storage storage.Storage)
 }
@@ -25,34 +23,22 @@ func NewLibrary(storage storage.Storage, generator idgenerator.Generator) MyLibr
 	return MyLibrary{storage, generator}
 }
 
-func (lib *MyLibrary) Find(title string, author string) (book.Book, bool) {
+func (lib MyLibrary) Find(title string, author string) (book.Book, bool) {
 	book := book.NewBook(title, author)
-	book.SetId(lib.generator.Generate(&book))
+	book.SetId(lib.generator.Generate(book))
 	return lib.storage.Find(book.GetId())
 }
 
 func (lib *MyLibrary) Add(title string, author string) {
 	book := book.NewBook(title, author)
-	book.SetId(lib.generator.Generate(&book))
+	book.SetId(lib.generator.Generate(book))
 	lib.storage.Add(book)
 }
 
-func (lib *MyLibrary) AddNum(title string, author string, num uint) {
+func (lib *MyLibrary) Remove(title string, author string) {
 	book := book.NewBook(title, author)
-	book.SetId(lib.generator.Generate(&book))
-	lib.storage.AddNum(book.GetId(), num)
-}
-
-func (lib *MyLibrary) RemoveNum(title string, author string, num uint) {
-	book := book.NewBook(title, author)
-	book.SetId(lib.generator.Generate(&book))
-	lib.storage.RemoveNum(book.GetId(), num)
-}
-
-func (lib *MyLibrary) RemoveAll(title string, author string) {
-	book := book.NewBook(title, author)
-	book.SetId(lib.generator.Generate(&book))
-	lib.storage.RemoveAll(book.GetId())
+	book.SetId(lib.generator.Generate(book))
+	lib.storage.Remove(book.GetId())
 }
 
 func (lib *MyLibrary) Regenerate(generator idgenerator.Generator) {
