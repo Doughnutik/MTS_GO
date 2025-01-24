@@ -1,23 +1,13 @@
 package main
 
-import "fmt"
-
-type mystruct struct {
-	a int
-}
-
-func (a *mystruct) change() {
-	a.a = 5
-}
+import (
+	"fmt"
+)
 
 func main() {
-	a := map[string]int{"aboba": 1, "amogus": 2}
-	b := a
+	a := [2]int{0, 0}
 
-	for key, _ := range b {
-		b[key] = 100
+	if a == nil {
+		fmt.Println("true")
 	}
-
-	fmt.Println(b)
-	fmt.Println(a)
 }
